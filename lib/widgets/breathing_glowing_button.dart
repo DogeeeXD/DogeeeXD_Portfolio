@@ -68,7 +68,6 @@ class _BreathingGlowingButtonState extends State<BreathingGlowingButton>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _animationController.dispose();
     super.dispose();
   }

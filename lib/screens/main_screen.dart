@@ -6,7 +6,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dogeeexd/screens/aboutme_screen.dart';
-import 'package:dogeeexd/screens/auth_screen.dart';
+
 import 'package:dogeeexd/screens/home_screen.dart';
 import 'package:dogeeexd/selected_user.dart';
 import 'package:dogeeexd/widgets/breathing_background.dart';

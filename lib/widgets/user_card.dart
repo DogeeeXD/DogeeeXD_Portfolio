@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dogeeexd/screens/main_screen.dart';
 import 'package:dogeeexd/selected_user.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:dogeeexd/extensions/hover_extensions.dart';
 import 'package:provider/provider.dart';

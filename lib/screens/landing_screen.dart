@@ -3,7 +3,7 @@ import 'package:dogeeexd/screens/main_screen.dart';
 import 'package:dogeeexd/selected_user.dart';
 import 'package:dogeeexd/services/search_service.dart';
 import 'package:dogeeexd/widgets/breathing_background.dart';
-import 'package:dogeeexd/widgets/custom_textfield.dart';
+
 import 'package:dogeeexd/widgets/user_card.dart';
 import 'package:dogeeexd/widgets/wave_curve.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -41,7 +41,6 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _filter.dispose();
     super.dispose();
   }
