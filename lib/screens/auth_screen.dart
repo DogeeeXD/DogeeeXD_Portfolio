@@ -36,7 +36,7 @@ class _AuthScreenState extends State<AuthScreen> {
             context: context,
             child: AlertDialog(
               title: Text('An error occured'),
-              content: Text(err),
+              content: Text(err.toString()),
             ),
           );
         }).whenComplete(() {
@@ -58,7 +58,20 @@ class _AuthScreenState extends State<AuthScreen> {
       } else {
         _authService
             .createUser(context, email, password, username)
-            .whenComplete(() {
+            .catchError((err) {
+          print(err);
+          setState(() {
+            _isLoading = false;
+            //_errMessage = err.toString();
+          });
+          showDialog(
+            context: context,
+            child: AlertDialog(
+              title: Text('An error occured'),
+              content: Text(err.toString()),
+            ),
+          );
+        }).whenComplete(() {
           _authService.checkEmailVerified().listen((event) {
             //print('event: $event');
             if (event == true) {
