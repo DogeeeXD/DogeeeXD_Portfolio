@@ -54,7 +54,6 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('build landing page');
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,

@@ -11,6 +11,7 @@ class _AuthScreenState extends State<AuthScreen> {
   bool checkEmail = false;
   bool emailSent = false;
   final _authService = AuthService();
+  String _errMessage;
 
   void _submitAuthForm(
     String email,
@@ -65,6 +66,17 @@ class _AuthScreenState extends State<AuthScreen> {
       }
     } catch (err) {
       print(err.toString());
+      setState(() {
+        _isLoading = false;
+        _errMessage = err.toString();
+      });
+      showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('An error occured'),
+          content: Text(_errMessage),
+        ),
+      );
     }
   }
 
@@ -438,7 +450,8 @@ class _AuthFormState extends State<AuthForm> {
                                     ),
                                   ),
                                   _emailSent
-                                      ? Text('Email sent. Please check.')
+                                      ? Text(
+                                          'Reset link sent. Please check your email.')
                                       : Container(),
                                 ],
                               ),
