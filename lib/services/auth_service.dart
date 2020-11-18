@@ -22,6 +22,10 @@ class AuthService {
       throw err;
     });
 
+    if (!_auth.currentUser.emailVerified) {
+      await _auth.currentUser.sendEmailVerification();
+    }
+
     await FirebaseFirestore.instance
         .collection('users')
         .doc(authResult.user.uid)
@@ -47,12 +51,33 @@ class AuthService {
     )
         .catchError((err) {
       throw err;
-      // Scaffold.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text(err),
-      //     backgroundColor: Theme.of(context).errorColor,
-      //   ),
-      // );
     });
+  }
+
+  Stream<bool> checkEmailVerified() async* {
+    var _auth = FirebaseAuth.instance;
+
+    bool isVerified = false;
+
+    while (!_auth.currentUser.emailVerified) {
+      isVerified = _auth.currentUser.emailVerified;
+      await Future.delayed(Duration(seconds: 1));
+      yield isVerified;
+      _auth.currentUser.reload();
+      // if (isVerified) break;
+    }
+    isVerified = _auth.currentUser.emailVerified;
+    print('verified!');
+    yield isVerified;
+  }
+
+  sendVerificationEmail() async {
+    final _auth = FirebaseAuth.instance;
+    await _auth.currentUser.sendEmailVerification();
+  }
+
+  resetPassword(String email) async {
+    final _auth = FirebaseAuth.instance;
+    await _auth.sendPasswordResetEmail(email: email);
   }
 }

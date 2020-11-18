@@ -30,7 +30,9 @@ class _EditAboutBlockState extends State<EditAboutBlock> {
     return StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if (snapshot.hasData && userId == currentUser.uid) {
+          if (snapshot.hasData &&
+              userId == currentUser.uid &&
+              currentUser.emailVerified) {
             return IconButton(
               icon: Icon(Icons.edit),
               onPressed: () {

@@ -20,7 +20,7 @@ class SelectedUser with ChangeNotifier {
 
   set userId(String userId) {
     this._userId = userId;
-    print('Set userId to $userId');
+    //print('Set userId to $userId');
     notifyListeners();
   }
 }

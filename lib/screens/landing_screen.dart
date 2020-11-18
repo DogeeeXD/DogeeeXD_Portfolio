@@ -2,15 +2,20 @@ import 'package:dogeeexd/screens/auth_screen.dart';
 import 'package:dogeeexd/screens/main_screen.dart';
 import 'package:dogeeexd/selected_user.dart';
 import 'package:dogeeexd/services/search_service.dart';
+import 'package:dogeeexd/theme_provider.dart';
 import 'package:dogeeexd/widgets/breathing_background.dart';
 
 import 'package:dogeeexd/widgets/user_card.dart';
+import 'package:dogeeexd/widgets/verify_login.dart';
 import 'package:dogeeexd/widgets/wave_curve.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LandingScreen extends StatefulWidget {
+  final ThemeProvider currentTheme;
+
+  LandingScreen(this.currentTheme);
   @override
   _LandingScreenState createState() => _LandingScreenState();
 }
@@ -19,6 +24,8 @@ class _LandingScreenState extends State<LandingScreen> {
   final TextEditingController _filter = TextEditingController();
   bool _hasUser = false;
   String _userId;
+  bool _isDarkMode = false;
+  final _auth = FirebaseAuth.instance;
 
   Widget _buildUserCard() {
     if (_hasUser == false && _filter.text.isNotEmpty) {
@@ -47,6 +54,7 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('build landing page');
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,
@@ -67,30 +75,43 @@ class _LandingScreenState extends State<LandingScreen> {
                   child: StreamBuilder(
                       stream: FirebaseAuth.instance.authStateChanges(),
                       builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return RaisedButton(
-                            child: Text('Go to your portfolio'),
-                            onPressed: () {
-                              print(snapshot.data.uid);
-                              // Set selectedUser
-                              Provider.of<SelectedUser>(context, listen: false)
-                                  .userId = snapshot.data.uid;
+                        if (snapshot.hasData &&
+                            _auth.currentUser.emailVerified) {
+                          return Container(
+                            width: 250,
+                            child: RaisedButton(
+                              child: Text('Go to your portfolio'),
+                              onPressed: () {
+                                //print(snapshot.data.uid);
+                                // Set selectedUser
+                                Provider.of<SelectedUser>(context,
+                                        listen: false)
+                                    .userId = snapshot.data.uid;
 
-                              // Push to MainScreen
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => MainScreen()));
-                            },
+                                // Push to MainScreen
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => MainScreen()));
+                              },
+                            ),
                           );
                         }
-                        return RaisedButton(
-                          child: Text('Start'),
-                          onPressed: () {
-                            showDialog(
+                        return Container(
+                          width: 200,
+                          child: RaisedButton(
+                            child: Text('Start'),
+                            onPressed: () {
+                              showDialog(
                                 context: context,
                                 builder: (context) {
                                   return AuthScreen();
-                                });
-                          },
+                                },
+                                barrierDismissible: false,
+                              ).then((value) {
+                                // Rebuild LandingScreen so UI changes can be applied
+                                setState(() {});
+                              });
+                            },
+                          ),
                         );
                       }),
                 ),
@@ -175,7 +196,32 @@ class _LandingScreenState extends State<LandingScreen> {
                     ),
                   ),
                 ),
+                // Switch(
+                //   value: _isDarkMode,
+                //   onChanged: (value) {
+                //     setState(() {
+                //       _isDarkMode = value;
+                //       widget.currentTheme.setTheme(_isDarkMode);
+                //       //Provider.of<ThemeProvider>(context).setTheme(_isDarkMode);
+                //     });
+                //   },
+                // ),
                 _buildUserCard(),
+                SizedBox(
+                  height: 50,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Creator's portfolio:"),
+                    Flexible(
+                      child: UserCard(
+                        userId: 'ALfxttpEMzY40Q9qWJFozVX9yd32',
+                        shadowColor: Colors.amber[200],
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

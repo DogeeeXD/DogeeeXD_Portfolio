@@ -8,6 +8,9 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   var _isLoading = false;
+  bool checkEmail = false;
+  bool emailSent = false;
+  final _authService = AuthService();
 
   void _submitAuthForm(
     String email,
@@ -15,7 +18,7 @@ class _AuthScreenState extends State<AuthScreen> {
     String username,
     bool isLogin,
   ) async {
-    final _authService = AuthService();
+    //final _authService = AuthService();
 
     try {
       setState(() {
@@ -25,18 +28,42 @@ class _AuthScreenState extends State<AuthScreen> {
         _authService.loginUser(context, email, password).catchError((err) {
           print(err);
         }).whenComplete(() {
-          setState(() {
-            _isLoading = false;
-            Navigator.pop(context);
+          // setState(() {
+          //   _isLoading = false;
+          //   Navigator.pop(context);
+          // });
+          _authService.checkEmailVerified().listen((event) {
+            //print('event: $event');
+            if (event == true) {
+              setState(() {
+                _isLoading = false;
+                checkEmail = false;
+                Navigator.pop(context);
+              });
+            } else if (event == false) {
+              setState(() {
+                checkEmail = true;
+              });
+            }
           });
         });
       } else {
         _authService
             .createUser(context, email, password, username)
             .whenComplete(() {
-          setState(() {
-            _isLoading = false;
-            Navigator.pop(context);
+          _authService.checkEmailVerified().listen((event) {
+            //print('event: $event');
+            if (event == true) {
+              setState(() {
+                _isLoading = false;
+                checkEmail = false;
+                Navigator.pop(context);
+              });
+            } else if (event == false) {
+              setState(() {
+                checkEmail = true;
+              });
+            }
           });
         });
       }
@@ -47,18 +74,66 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Color(0xFFf5f6fa),
-      child: Container(
-        width: 800,
-        height: 500,
-        alignment: Alignment.center,
-        child: AuthForm(
-          _isLoading,
-          _submitAuthForm,
-        ),
-      ),
-    );
+    return checkEmail
+        ? Dialog(
+            backgroundColor: Color(0xFFf5f6fa),
+            child: Container(
+              width: 800,
+              height: 500,
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Waiting for email verification.'),
+                  emailSent
+                      ? Text('Email is sent.')
+                      : RaisedButton(
+                          child: Text('Resend verification email.'),
+                          onPressed: () {
+                            _authService.sendVerificationEmail();
+                            setState(() {
+                              emailSent = true;
+                            });
+                          },
+                        ),
+                ],
+              ),
+            ),
+          )
+        : Dialog(
+            backgroundColor: Color(0xFFf5f6fa),
+            child: Container(
+              width: 800,
+              height: 500,
+              alignment: Alignment.center,
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: AuthForm(
+                        _isLoading,
+                        _submitAuthForm,
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IconButton(
+                        icon: Icon(Icons.cancel_rounded),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
   }
 }
 
@@ -287,7 +362,86 @@ class _AuthFormState extends State<AuthForm> {
                       style: TextStyle(color: Theme.of(context).highlightColor),
                     ),
                     onTap: () {
+                      String _email;
                       // Go to reset password
+                      showDialog(
+                        context: context,
+                        child: Dialog(
+                          backgroundColor: Color(0xFFf5f6fa),
+                          child: Container(
+                            width: 800,
+                            height: 500,
+                            padding: EdgeInsets.all(8),
+                            alignment: Alignment.center,
+                            child: Container(
+                              constraints: BoxConstraints(maxWidth: _maxWidth),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                      'Enter your email so we can send a password reset link.'),
+                                  Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.all(15),
+                                        prefixIcon: Icon(Icons.mail_rounded),
+                                        labelText: 'Email',
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30)),
+                                          borderSide: BorderSide(
+                                            color:
+                                                Theme.of(context).accentColor,
+                                            width: 1,
+                                          ),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30)),
+                                          borderSide: BorderSide(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            width: 1,
+                                          ),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30)),
+                                          borderSide: BorderSide(
+                                            color: Theme.of(context).errorColor,
+                                            width: 1,
+                                          ),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30)),
+                                          borderSide: BorderSide(
+                                            color: Theme.of(context).errorColor,
+                                            width: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      onChanged: (value) {
+                                        _email = value;
+                                      },
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 200,
+                                    child: RaisedButton(
+                                      child: Text('Send reset link'),
+                                      onPressed: () {
+                                        AuthService().resetPassword(_email);
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
                     },
                   ),
                 if (widget.isLoading)

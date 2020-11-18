@@ -59,29 +59,52 @@ class _MainScreenState extends State<MainScreen> {
                 bottomRight: Radius.circular(30),
               ),
               child: Drawer(
-                child: ListView.builder(
-                    itemCount: _pageList.length,
-                    itemBuilder: (ctx, index) {
-                      return ListTile(
-                        title: Text(
-                          _pageList[index]['name'],
-                          style: _selectedPage == index
-                              ? TextStyle(color: Theme.of(context).primaryColor)
-                              : null,
-                        ),
-                        onTap: () {
-                          Navigator.pop(context);
-                          _pageController.animateToPage(
-                            index,
-                            duration: Duration(milliseconds: 200),
-                            curve: Curves.easeIn,
+                child: Column(
+                  children: [
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: _pageList.length,
+                        itemBuilder: (ctx, index) {
+                          return ListTile(
+                            title: Text(
+                              _pageList[index]['name'],
+                              style: _selectedPage == index
+                                  ? TextStyle(
+                                      color: Theme.of(context).primaryColor)
+                                  : null,
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+                              _pageController.animateToPage(
+                                index,
+                                duration: Duration(milliseconds: 200),
+                                curve: Curves.easeIn,
+                              );
+                              setState(() {
+                                _selectedPage = index;
+                              });
+                            },
                           );
-                          setState(() {
-                            _selectedPage = index;
-                          });
-                        },
-                      );
-                    }),
+                        }),
+                    StreamBuilder(
+                        stream: FirebaseAuth.instance.authStateChanges(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return ListTile(
+                              title: Text(
+                                'Logout',
+                                style: TextStyle(
+                                    color: Theme.of(context).errorColor),
+                              ),
+                              onTap: () {
+                                FirebaseAuth.instance.signOut();
+                              },
+                            );
+                          }
+                          return Container();
+                        }),
+                  ],
+                ),
               ),
             )
           : null,

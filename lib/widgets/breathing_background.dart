@@ -41,10 +41,13 @@ enum _BgProps {
 class AnimatedBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Color firstColor = Color(0xFFF3F2F7);
+    Color secondColor = Theme.of(context).accentColor;
+    Color thirdColor = Theme.of(context).backgroundColor;
     // background color animations
     final tween = MultiTween<_BgProps>()
-      ..add(_BgProps.color1, Color(0xFFF3F2F7).tweenTo(Color(0xFFdde2ec)))
-      ..add(_BgProps.color2, Color(0xFFdde2ec).tweenTo(Color(0xFFf5f6fa)));
+      ..add(_BgProps.color1, firstColor.tweenTo(secondColor))
+      ..add(_BgProps.color2, secondColor.tweenTo(thirdColor));
 
     return MirrorAnimation<MultiTweenValues<_BgProps>>(
       tween: tween,

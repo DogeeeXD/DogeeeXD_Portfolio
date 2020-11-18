@@ -8,8 +8,9 @@ import 'package:provider/provider.dart';
 
 class UserCard extends StatelessWidget {
   final String userId;
+  final Color shadowColor;
 
-  UserCard({@required this.userId});
+  UserCard({@required this.userId, this.shadowColor});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class UserCard extends StatelessWidget {
               FirebaseFirestore.instance.collection('users').doc(userId).get(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              print(snapshot.data['username']);
+              //print(snapshot.data['username']);
               var userData = snapshot.data;
               return InkWell(
                 child: Container(
@@ -36,7 +37,7 @@ class UserCard extends StatelessWidget {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Theme.of(context).primaryColor,
+                        color: shadowColor ?? Theme.of(context).primaryColor,
                         blurRadius: 5,
                         spreadRadius: 3,
                       ),

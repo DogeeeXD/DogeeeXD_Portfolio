@@ -45,7 +45,9 @@ class _EditHomeState extends State<EditHome> {
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, userSnapshot) {
-        if (userSnapshot.hasData && userId == currentUser.uid) {
+        if (userSnapshot.hasData &&
+            userId == currentUser.uid &&
+            currentUser.emailVerified) {
           return IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
