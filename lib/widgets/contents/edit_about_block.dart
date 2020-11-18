@@ -78,7 +78,7 @@ class _EditAboutBlockState extends State<EditAboutBlock> {
                                 },
                               ),
                               RaisedButton(
-                                child: Text('Add'),
+                                child: Text('Save'),
                                 onPressed: () {
                                   // Add firestore doc
                                   _submitForm();

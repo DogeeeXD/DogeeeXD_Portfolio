@@ -11,6 +11,7 @@ import 'package:dogeeexd/widgets/wave_curve.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:dogeeexd/extensions/hover_extensions.dart';
 
 class LandingScreen extends StatefulWidget {
   final ThemeProvider currentTheme;
@@ -62,6 +63,7 @@ class _LandingScreenState extends State<LandingScreen> {
           WaveCurve(),
           SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'Create your own portfolio',
@@ -213,11 +215,44 @@ class _LandingScreenState extends State<LandingScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("Creator's portfolio:"),
-                    Flexible(
-                      child: UserCard(
-                        userId: 'ALfxttpEMzY40Q9qWJFozVX9yd32',
-                        shadowColor: Colors.amber[200],
-                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: InkWell(
+                        child: Container(
+                          padding: EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).backgroundColor,
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.amber[200],
+                                blurRadius: 5,
+                                spreadRadius: 3,
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              Text('DogeeeXD'),
+                              //Text(userData['email']),
+                            ],
+                          ),
+                        ),
+                        onTap: () {
+                          // Set selectedUser
+                          Provider.of<SelectedUser>(context, listen: false)
+                              .userId = 'ALfxttpEMzY40Q9qWJFozVX9yd32';
+
+                          // Push to MainScreen
+                          //Navigator.of(context).pushNamed('main');
+
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => MainScreen()));
+                        },
+                      ).moveUpOnHover,
                     ),
                   ],
                 ),

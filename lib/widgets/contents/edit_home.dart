@@ -116,7 +116,7 @@ class _EditHomeState extends State<EditHome> {
                               },
                             ),
                             RaisedButton(
-                              child: Text('Add'),
+                              child: Text('Save'),
                               onPressed: () {
                                 // Add firestore doc
                                 _submitForm();
