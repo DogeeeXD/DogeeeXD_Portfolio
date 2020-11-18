@@ -11,7 +11,7 @@ class _AuthScreenState extends State<AuthScreen> {
   bool checkEmail = false;
   bool emailSent = false;
   final _authService = AuthService();
-  String _errMessage;
+  //String _errMessage;
 
   void _submitAuthForm(
     String email,
@@ -28,6 +28,17 @@ class _AuthScreenState extends State<AuthScreen> {
       if (isLogin) {
         _authService.loginUser(context, email, password).catchError((err) {
           print(err);
+          setState(() {
+            _isLoading = false;
+            //_errMessage = err.toString();
+          });
+          showDialog(
+            context: context,
+            child: AlertDialog(
+              title: Text('An error occured'),
+              content: Text(err),
+            ),
+          );
         }).whenComplete(() {
           _authService.checkEmailVerified().listen((event) {
             //print('event: $event');
@@ -66,17 +77,17 @@ class _AuthScreenState extends State<AuthScreen> {
       }
     } catch (err) {
       print(err.toString());
-      setState(() {
-        _isLoading = false;
-        _errMessage = err.toString();
-      });
-      showDialog(
-        context: context,
-        child: AlertDialog(
-          title: Text('An error occured'),
-          content: Text(_errMessage),
-        ),
-      );
+      // setState(() {
+      //   _isLoading = false;
+      //   _errMessage = err.toString();
+      // });
+      // showDialog(
+      //   context: context,
+      //   child: AlertDialog(
+      //     title: Text('An error occured'),
+      //     content: Text(_errMessage),
+      //   ),
+      // );
     }
   }
 
