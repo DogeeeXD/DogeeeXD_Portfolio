@@ -28,10 +28,6 @@ class _AuthScreenState extends State<AuthScreen> {
         _authService.loginUser(context, email, password).catchError((err) {
           print(err);
         }).whenComplete(() {
-          // setState(() {
-          //   _isLoading = false;
-          //   Navigator.pop(context);
-          // });
           _authService.checkEmailVerified().listen((event) {
             //print('event: $event');
             if (event == true) {
@@ -363,6 +359,7 @@ class _AuthFormState extends State<AuthForm> {
                     ),
                     onTap: () {
                       String _email;
+                      bool _emailSent;
                       // Go to reset password
                       showDialog(
                         context: context,
@@ -431,11 +428,18 @@ class _AuthFormState extends State<AuthForm> {
                                     width: 200,
                                     child: RaisedButton(
                                       child: Text('Send reset link'),
-                                      onPressed: () {
-                                        AuthService().resetPassword(_email);
+                                      onPressed: () async {
+                                        await AuthService()
+                                            .resetPassword(_email);
+                                        setState(() {
+                                          _emailSent = true;
+                                        });
                                       },
                                     ),
                                   ),
+                                  _emailSent
+                                      ? Text('Email sent. Please check.')
+                                      : Container(),
                                 ],
                               ),
                             ),
