@@ -155,6 +155,11 @@ class _EditExperienceBlockFormState extends State<EditExperienceBlockForm> {
                   ),
                 );
               } else if (widget.docId == null) {
+                if (_dateTimeStart == null && _dateTimeEnd == null) {
+                  _dateTimeStart = DateTime.now();
+                  _dateTimeEnd = DateTime(DateTime.now().year,
+                      DateTime.now().month, DateTime.now().day + 1);
+                }
                 return Form(
                   key: _formKey,
                   child: SingleChildScrollView(
@@ -195,9 +200,6 @@ class _EditExperienceBlockFormState extends State<EditExperienceBlockForm> {
                             _dateTimeStart = _dateTimeRange.start;
                             _dateTimeEnd = _dateTimeRange.end;
                           });
-
-                          print(_dateTimeStart);
-                          print(_dateTimeEnd);
                         },
                       ),
                       CustomTextField(
