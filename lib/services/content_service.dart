@@ -52,7 +52,7 @@ class ContentService {
           .doc(currentUser.uid)
           .collection('experiences')
           .doc(docId)
-          .set(dataMap)
+          .set(dataMap, SetOptions(merge: true))
           .catchError((err) {
         print(err);
       });

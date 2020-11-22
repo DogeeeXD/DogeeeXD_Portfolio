@@ -23,8 +23,8 @@ class _EditExperienceBlockFormState extends State<EditExperienceBlockForm> {
   String _jobTitle;
   String _company;
   DateTimeRange _dateTimeRange;
-  DateTime _dateTimeStart = DateTime.now();
-  DateTime _dateTimeEnd = DateTime.now();
+  DateTime _dateTimeStart;
+  DateTime _dateTimeEnd;
   String _startDate;
   String _endDate;
   String _location;
@@ -75,10 +75,16 @@ class _EditExperienceBlockFormState extends State<EditExperienceBlockForm> {
                 : null,
             builder: (context, snapshot) {
               if (widget.docId != null && snapshot.hasData) {
-                // _startDate = formatter.format(DateTime.parse(
-                //     snapshot.data['startDate'].toDate().toString()));
-                // _endDate = formatter.format(DateTime.parse(
-                //     snapshot.data['endDate'].toDate().toString()));
+                // _dateTimeStart = DateTime.parse(
+                //     snapshot.data['startDate'].toDate().toString());
+                // _dateTimeEnd = DateTime.parse(
+                //     snapshot.data['endDate'].toDate().toString());
+                if (_dateTimeStart == null && _dateTimeEnd == null) {
+                  _dateTimeStart = DateTime.parse(
+                      snapshot.data['startDate'].toDate().toString());
+                  _dateTimeEnd = DateTime.parse(
+                      snapshot.data['endDate'].toDate().toString());
+                }
 
                 return Form(
                   key: _formKey,
@@ -123,7 +129,8 @@ class _EditExperienceBlockFormState extends State<EditExperienceBlockForm> {
                       RaisedButton(
                         child: Text('Select Date'),
                         onPressed: () async {
-                          _dateTimeRange = await dateTimeRangePicker(context);
+                          _dateTimeRange = await dateTimeRangePicker(
+                              context, _dateTimeStart, _dateTimeEnd);
                           setState(() {
                             _dateTimeStart = _dateTimeRange.start;
                             _dateTimeEnd = _dateTimeRange.end;
@@ -181,7 +188,8 @@ class _EditExperienceBlockFormState extends State<EditExperienceBlockForm> {
                       RaisedButton(
                         child: Text('Select Date'),
                         onPressed: () async {
-                          _dateTimeRange = await dateTimeRangePicker(context);
+                          _dateTimeRange = await dateTimeRangePicker(
+                              context, _dateTimeStart, _dateTimeEnd);
 
                           setState(() {
                             _dateTimeStart = _dateTimeRange.start;
