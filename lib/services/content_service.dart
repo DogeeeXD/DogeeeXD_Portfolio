@@ -27,9 +27,11 @@ class ContentService {
   addExperience({
     String jobTitle,
     String company,
-    String workDate,
+    DateTime startDate,
+    DateTime endDate,
     String location,
     String description,
+    String docId,
   }) async {
     final currentUser = FirebaseAuth.instance.currentUser;
 
@@ -38,17 +40,43 @@ class ContentService {
     dataMap = {
       'jobTitle': jobTitle,
       'company': company,
-      'workDate': workDate,
+      'startDate': startDate,
+      'endDate': endDate,
       'workLocation': location,
       'description': description,
     };
 
+    if (docId != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .collection('experiences')
+          .doc(docId)
+          .set(dataMap)
+          .catchError((err) {
+        print(err);
+      });
+    } else if (docId == null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .collection('experiences')
+          .doc()
+          .set(dataMap)
+          .catchError((err) {
+        print(err);
+      });
+    }
+  }
+
+  deleteExperience(String docId) async {
+    final currentUser = FirebaseAuth.instance.currentUser;
     await FirebaseFirestore.instance
         .collection('users')
         .doc(currentUser.uid)
         .collection('experiences')
-        .doc()
-        .set(dataMap)
+        .doc(docId)
+        .delete()
         .catchError((err) {
       print(err);
     });

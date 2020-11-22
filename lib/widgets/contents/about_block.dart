@@ -17,7 +17,7 @@ class AboutBlock extends StatelessWidget {
         if (snapshot.hasData) {
           String aboutMe = snapshot.data.data()['aboutMe'];
 
-          return Text(aboutMe ?? '');
+          return SelectableText(aboutMe ?? '');
         }
 
         return Container();
