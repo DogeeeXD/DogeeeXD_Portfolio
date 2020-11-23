@@ -91,7 +91,7 @@ class ExperienceBlock extends StatelessWidget {
                             ],
                           ),
                           children: [
-                            SelectableText(
+                            Text(
                               items[index]['description'],
                               style: TextStyle(
                                 fontSize: 14,
