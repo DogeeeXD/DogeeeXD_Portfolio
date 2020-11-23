@@ -27,6 +27,7 @@ class ExperienceBlock extends StatelessWidget {
         if (snapshot.hasData) {
           var items = snapshot.data.docs;
           return ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: items.length,
             itemBuilder: (context, index) {
