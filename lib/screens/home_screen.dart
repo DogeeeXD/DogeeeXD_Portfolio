@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
     String userId = Provider.of<SelectedUser>(context).userId;
 
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       alignment: Alignment.center,
       color: Colors.transparent,
       child: Column(

@@ -13,7 +13,7 @@ class AboutMeScreen extends StatelessWidget {
 
     return Container(
       color: Colors.transparent,
-      padding: const EdgeInsets.all(30),
+      padding: const EdgeInsets.only(top: 0, bottom: 35, left: 30, right: 30),
       child: ListView(
         children: [
           Row(
@@ -38,7 +38,7 @@ class AboutMeScreen extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-                constraints: BoxConstraints(maxWidth: 600),
+                constraints: BoxConstraints(maxWidth: 800),
                 child: ExperienceBlock()),
           ),
         ],

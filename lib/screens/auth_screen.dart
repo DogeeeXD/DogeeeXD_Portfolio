@@ -90,17 +90,6 @@ class _AuthScreenState extends State<AuthScreen> {
       }
     } catch (err) {
       print(err.toString());
-      // setState(() {
-      //   _isLoading = false;
-      //   _errMessage = err.toString();
-      // });
-      // showDialog(
-      //   context: context,
-      //   child: AlertDialog(
-      //     title: Text('An error occured'),
-      //     content: Text(_errMessage),
-      //   ),
-      // );
     }
   }
 

@@ -226,6 +226,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  sa_liquid:
+    dependency: transitive
+    description:
+      name: sa_liquid
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   sa_multi_tween:
     dependency: transitive
     description:
@@ -253,7 +260,7 @@ packages:
       name: simple_animations
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.3"
+    version: "2.3.1"
   sky_engine:
     dependency: transitive
     description: flutter

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "940835274911",
+    "firebase_url": "https://dogeeexd-ea014.firebaseio.com",
+    "project_id": "dogeeexd-ea014",
+    "storage_bucket": "dogeeexd-ea014.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:940835274911:android:8cd47f3973ef48844c22aa",
+        "android_client_info": {
+          "package_name": "com.dogeeexd.dogeeexd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "940835274911-spb1qt9e8e7sr1bli9ke1p6h79ve3l9t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCj9PrKu60vMtS0PztPYwqn-ADizhwuQuU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "940835274911-spb1qt9e8e7sr1bli9ke1p6h79ve3l9t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

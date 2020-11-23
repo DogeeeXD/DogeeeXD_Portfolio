@@ -4,6 +4,8 @@
 // Every item has onHover floating effects
 // Include Login/SignUp button
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dogeeexd/screens/aboutme_screen.dart';
 
@@ -86,23 +88,24 @@ class _MainScreenState extends State<MainScreen> {
                             },
                           );
                         }),
-                    StreamBuilder(
-                        stream: FirebaseAuth.instance.authStateChanges(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return ListTile(
-                              title: Text(
-                                'Logout',
-                                style: TextStyle(
-                                    color: Theme.of(context).errorColor),
-                              ),
-                              onTap: () {
-                                FirebaseAuth.instance.signOut();
-                              },
-                            );
-                          }
-                          return Container();
-                        }),
+                    DrawerLogout(),
+                    // StreamBuilder(
+                    //     stream: FirebaseAuth.instance.authStateChanges(),
+                    //     builder: (context, snapshot) {
+                    //       if (snapshot.hasData) {
+                    //         return ListTile(
+                    //           title: Text(
+                    //             'Logout',
+                    //             style: TextStyle(
+                    //                 color: Theme.of(context).errorColor),
+                    //           ),
+                    //           onTap: () {
+                    //             FirebaseAuth.instance.signOut();
+                    //           },
+                    //         );
+                    //       }
+                    //       return Container();
+                    //     }),
                   ],
                 ),
               ),
@@ -215,7 +218,7 @@ class _MainScreenState extends State<MainScreen> {
           BreathingBackground(),
           WaveCurve(),
           Padding(
-            padding: const EdgeInsets.only(top: 80.0, bottom: 80),
+            padding: const EdgeInsets.only(top: 50.0, bottom: 85),
             child: PageView(
               scrollDirection: ResponsiveWidget.isSmallScreen(context)
                   ? Axis.vertical
@@ -231,5 +234,41 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
     );
+  }
+}
+
+class DrawerLogout extends StatefulWidget {
+  @override
+  _DrawerLogoutState createState() => _DrawerLogoutState();
+}
+
+class _DrawerLogoutState extends State<DrawerLogout> {
+  Stream authState;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    authState = FirebaseAuth.instance.authStateChanges();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream: authState,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListTile(
+              title: Text(
+                'Logout',
+                style: TextStyle(color: Theme.of(context).errorColor),
+              ),
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+              },
+            );
+          }
+          return Container();
+        });
   }
 }

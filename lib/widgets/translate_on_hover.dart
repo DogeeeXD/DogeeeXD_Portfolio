@@ -34,3 +34,14 @@ class _TranslateOnHoverState extends State<TranslateOnHover> {
     });
   }
 }
+
+class Nothing extends StatelessWidget {
+  final Widget child;
+
+  Nothing(this.child);
+
+  @override
+  Widget build(BuildContext context) {
+    return child;
+  }
+}

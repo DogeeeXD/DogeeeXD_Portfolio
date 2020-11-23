@@ -61,203 +61,196 @@ class _LandingScreenState extends State<LandingScreen> {
         children: [
           BreathingBackground(),
           WaveCurve(),
-          SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Create your own portfolio',
-                  style: TextStyle(
-                    fontSize: 30,
-                  ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Create your own portfolio',
+                style: TextStyle(
+                  fontSize: 30,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: StreamBuilder(
-                      stream: FirebaseAuth.instance.authStateChanges(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData &&
-                            _auth.currentUser.emailVerified) {
-                          return Container(
-                            width: 250,
-                            child: RaisedButton(
-                              child: Text('Go to your portfolio'),
-                              onPressed: () {
-                                //print(snapshot.data.uid);
-                                // Set selectedUser
-                                Provider.of<SelectedUser>(context,
-                                        listen: false)
-                                    .userId = snapshot.data.uid;
-
-                                // Push to MainScreen
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => MainScreen()));
-                              },
-                            ),
-                          );
-                        }
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: StreamBuilder(
+                    stream: FirebaseAuth.instance.authStateChanges(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && _auth.currentUser.emailVerified) {
                         return Container(
-                          width: 200,
+                          width: 250,
                           child: RaisedButton(
-                            child: Text('Start'),
+                            child: Text('Go to your portfolio'),
                             onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AuthScreen();
-                                },
-                                barrierDismissible: false,
-                              ).then((value) {
-                                // Rebuild LandingScreen so UI changes can be applied
-                                setState(() {});
-                              });
+                              //print(snapshot.data.uid);
+                              // Set selectedUser
+                              Provider.of<SelectedUser>(context, listen: false)
+                                  .userId = snapshot.data.uid;
+
+                              // Push to MainScreen
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => MainScreen()));
                             },
                           ),
                         );
-                      }),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Or'),
-                ),
-                Text('Enter username to search for existing portfolio'),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.only(left: 15, right: 15),
-                    constraints: BoxConstraints(
-                      maxWidth: 600,
-                      maxHeight: 100,
-                    ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(15),
-                        prefixIcon: Icon(Icons.search_rounded),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).primaryColor,
-                            width: 1,
-                          ),
+                      }
+                      return Container(
+                        width: 200,
+                        child: RaisedButton(
+                          child: Text('Start'),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AuthScreen();
+                              },
+                              barrierDismissible: false,
+                            ).then((value) {
+                              // Rebuild LandingScreen so UI changes can be applied
+                              setState(() {});
+                            });
+                          },
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).primaryColor,
-                            width: 1,
-                          ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).errorColor,
-                            width: 1,
-                          ),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).errorColor,
-                            width: 1,
-                          ),
+                      );
+                    }),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Or'),
+              ),
+              Text('Enter username to search for existing portfolio'),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(left: 15, right: 15),
+                  constraints: BoxConstraints(
+                    maxWidth: 600,
+                    maxHeight: 100,
+                  ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(15),
+                      prefixIcon: Icon(Icons.search_rounded),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).primaryColor,
+                          width: 1,
                         ),
                       ),
-                      controller: _filter,
-                      onChanged: (value) async {
-                        // pass _searchText to search and return a user card
-                        await SearchService().searchUser(value).then((data) {
-                          print(data);
-                          _userId = data;
-                          setState(() {
-                            _hasUser = true;
-                          });
-                        }).catchError((err) {
-                          print(err);
-                          setState(() {
-                            _hasUser = false;
-                          });
-                        });
-                      },
-                      onSubmitted: (value) async {
-                        // pass _searchText to search and return a user card
-                        await SearchService().searchUser(value).then((data) {
-                          print(data);
-                          _userId = data;
-                          setState(() {
-                            _hasUser = true;
-                          });
-                        }).catchError((err) {
-                          print(err);
-                          setState(() {
-                            _hasUser = false;
-                          });
-                        });
-                      },
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).primaryColor,
+                          width: 1,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).errorColor,
+                          width: 1,
+                        ),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).errorColor,
+                          width: 1,
+                        ),
+                      ),
                     ),
+                    controller: _filter,
+                    onChanged: (value) async {
+                      // pass _searchText to search and return a user card
+                      await SearchService().searchUser(value).then((data) {
+                        print(data);
+                        _userId = data;
+                        setState(() {
+                          _hasUser = true;
+                        });
+                      }).catchError((err) {
+                        print(err);
+                        setState(() {
+                          _hasUser = false;
+                        });
+                      });
+                    },
+                    onSubmitted: (value) async {
+                      // pass _searchText to search and return a user card
+                      await SearchService().searchUser(value).then((data) {
+                        print(data);
+                        _userId = data;
+                        setState(() {
+                          _hasUser = true;
+                        });
+                      }).catchError((err) {
+                        print(err);
+                        setState(() {
+                          _hasUser = false;
+                        });
+                      });
+                    },
                   ),
                 ),
-                // Switch(
-                //   value: _isDarkMode,
-                //   onChanged: (value) {
-                //     setState(() {
-                //       _isDarkMode = value;
-                //       widget.currentTheme.setTheme(_isDarkMode);
-                //       //Provider.of<ThemeProvider>(context).setTheme(_isDarkMode);
-                //     });
-                //   },
-                // ),
-                _buildUserCard(),
-                SizedBox(
-                  height: 50,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Creator's portfolio:"),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: InkWell(
-                        child: Container(
-                          padding: EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).backgroundColor,
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15),
+              ),
+              // Switch(
+              //   value: _isDarkMode,
+              //   onChanged: (value) {
+              //     setState(() {
+              //       _isDarkMode = value;
+              //       widget.currentTheme.setTheme(_isDarkMode);
+              //       //Provider.of<ThemeProvider>(context).setTheme(_isDarkMode);
+              //     });
+              //   },
+              // ),
+              _buildUserCard(),
+              SizedBox(
+                height: 50,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Creator's portfolio:"),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: InkWell(
+                      child: Container(
+                        padding: EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).backgroundColor,
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(15),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.amber[200],
+                              blurRadius: 5,
+                              spreadRadius: 3,
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.amber[200],
-                                blurRadius: 5,
-                                spreadRadius: 3,
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Text('DogeeeXD'),
-                              //Text(userData['email']),
-                            ],
-                          ),
+                          ],
                         ),
-                        onTap: () {
-                          // Set selectedUser
-                          Provider.of<SelectedUser>(context, listen: false)
-                              .userId = 'ALfxttpEMzY40Q9qWJFozVX9yd32';
+                        child: Column(
+                          children: [
+                            Text('DogeeeXD'),
+                            //Text(userData['email']),
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        // Set selectedUser
+                        Provider.of<SelectedUser>(context, listen: false)
+                            .userId = 'ALfxttpEMzY40Q9qWJFozVX9yd32';
 
-                          // Push to MainScreen
-                          //Navigator.of(context).pushNamed('main');
-
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => MainScreen()));
-                        },
-                      ).moveUpOnHover,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => MainScreen()));
+                      },
+                    ).moveUpOnHover,
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),

@@ -24,7 +24,6 @@ class UserCard extends StatelessWidget {
               FirebaseFirestore.instance.collection('users').doc(userId).get(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              //print(snapshot.data['username']);
               var userData = snapshot.data;
               return InkWell(
                 child: Container(
@@ -54,9 +53,6 @@ class UserCard extends StatelessWidget {
                   // Set selectedUser
                   Provider.of<SelectedUser>(context, listen: false).userId =
                       userId;
-
-                  // Push to MainScreen
-                  //Navigator.of(context).pushNamed('main');
 
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => MainScreen()));
